@@ -1,0 +1,123 @@
+/* * MCTrade Documentation Stylesheet 
+ * Theme: White, Silver, Transparent
+ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333333;
+    /* Transparent overlay over a subtle silver pattern or gradient */
+    background: linear-gradient(135deg, rgba(245, 245, 245, 0.8) 0%, rgba(211, 211, 211, 0.5) 100%);
+    background-attachment: fixed;
+    margin: 0;
+    padding: 40px 20px;
+}
+
+h1, h2, h3 {
+    color: #1a1a1a;
+    border-bottom: 1px solid silver;
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+/* Div containers for each section */
+.section {
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    padding: 30px;
+    /* White transparent background */
+    background-color: rgba(255, 255, 255, 0.65);
+    /* Silver borders */
+    border: 1px solid rgba(192, 192, 192, 0.8);
+    border-radius: 12px;
+    /* Transparent shadow to give floating effect */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Future features note box */
+.future-feature-note {
+    background-color: rgba(192, 192, 192, 0.15);
+    border-left: 4px solid silver;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+blockquote {
+    border-left: 4px solid silver;
+    margin: 1.5em 0;
+    padding: 0.5em 1.5em;
+    color: #555555;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.commercial-note {
+    background-color: rgba(255, 255, 255, 0.5);
+    font-size: 0.95em;
+}
+
+code {
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    background-color: rgba(192, 192, 192, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+pre {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid silver;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(192, 192, 192, 0.5);
+}
+
+th {
+    background-color: rgba(192, 192, 192, 0.3);
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+ul, ol {
+    margin-bottom: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+a {
+    color: #666666;
+    text-decoration: none;
+    border-bottom: 1px dotted silver;
+}
+
+a:hover {
+    color: #000000;
+    border-bottom: 1px solid #000000;
+}

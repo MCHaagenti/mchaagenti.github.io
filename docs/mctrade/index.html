@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCTrade — Item-to-Item Trading Market</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="intro" class="section">
+        <h1>MCTrade — Item-to-Item Trading Market</h1>
+        <p>MCTrade is a commercial, asynchronous <strong>item-to-item trading market</strong> for Minecraft servers, supporting the SpigotMC, PaperMC, and FoliaMC platforms. Players list an item they are giving away and the item they want in return; anyone can fulfil the offer through a chest GUI, with the proceeds held safely in a secure vault until the merchant claims them.</p>
+        
+        <blockquote class="commercial-note">
+            <strong>Commercial Software</strong> — MCTrade is published by <strong>MCHaagenti</strong> and is distributed for commercial sale. See the <code>LICENSE</code> file for terms.
+        </blockquote>
+
+        <div class="future-feature-note">
+            <p><em>Note: In the future I might add some features that only the paid tier can use, but the core system features will be free to use. For example, AI integration like making the AI "find a merchant who offers {item name} that I can exchange with {item name}".</em></p>
+        </div>
+    </div>
+
+    <div id="how-it-works" class="section">
+        <h2>How it works</h2>
+        <p>A trade is a one-for-the-other exchange:</p>
+        <blockquote>
+            <em>Merchant offers <code>N × Item A</code>, and needs <code>M × Item B</code> in return.</em>
+        </blockquote>
+        <ol>
+            <li><strong>Listing.</strong> A merchant runs <code>/trade create</code> and chooses <strong>both</strong> trade items from the whitelist — <strong>Choose Item to Offer</strong> and <strong>Choose Item to Receive</strong> each open a <strong>category</strong>, then that category's item page. The amount for each side is set to any quantity by left/right-clicking its display (±1, or ±10 with shift). Clicking <strong>Confirm</strong> takes the full offer amount from the merchant's inventory and lists the offer — if they do not actually hold that many, it reports an <strong>insufficient amount</strong> and nothing is taken. Both amounts can be any number.</li>
+            <li><strong>Browsing.</strong> Anyone runs <code>/trade</code> to open the market — a paginated chest GUI of <strong>all</strong> active global offers, <strong>one offer per row</strong> (four offers per page). Each row reads left to right as four columns:
+                <ul>
+                    <li><strong>Offered item</strong> — the item the merchant gives; hover to see the amount.</li>
+                    <li><strong>Needed item</strong> — the item you pay; hover to see the amount.</li>
+                    <li><strong>Merchant head</strong> — the head of the player who created the offer.</li>
+                    <li><strong>Trade button</strong> — click it to accept the trade.</li>
+                </ul>
+            </li>
+            <li><strong>Affordability at a glance.</strong> The trade button is coloured from the <em>viewer's</em> perspective:
+                <ul>
+                    <li>🟩 <strong>Green</strong> — you hold the required "need" items; click to accept.</li>
+                    <li>🟨 <strong>Yellow</strong> — this is your own offer (you cannot trade with yourself).</li>
+                    <li>🟥 <strong>Red</strong> — you are missing the required items (the offer is still visible).</li>
+                </ul>
+            </li>
+            <li><strong>Accepting.</strong> Clicking a green trade button re-checks your inventory, atomically claims the offer (so it can never be sold twice), removes your "need" items, and gives you the offered items.</li>
+            <li><strong>Vault.</strong> The "need" items are never dropped or force-added to the merchant's inventory. They are deposited into the merchant's <strong>secure vault</strong> (persisted in the database), and the merchant claims them at their leisure with <code>/trade vault</code>, withdrawing as much as their inventory can hold at a time. Online merchants are told a sale landed in their vault; offline merchants are reminded the next time they join. Nothing is ever lost to a full inventory, a restart, an item-clearing plugin, or theft.</li>
+        </ol>
+    </div>
+
+    <div id="item-whitelist" class="section">
+        <h3>Item whitelist</h3>
+        <p>Only items whose base type is on the <strong>trade item whitelist</strong> may be offered or requested. The whitelist lives in the <code>trade_item_whitelist</code> table, where the Base64 base item is the <strong>primary key</strong> and each row carries a <strong>category</strong> (quantities are never part of the whitelist). Storing the item as the key means checking whether something is tradeable is a single key lookup rather than a scan.</p>
+        <p>The whitelist is grouped into categories (configured under <code>whitelist.categories</code> in <code>config.yml</code>). Both browsing and administration start by choosing a category; items are then shown <strong>most-recently-added first</strong>, paginated across as many pages as needed. Administrators manage the whitelist in-game via <code>/trade admin</code>:</p>
+        <ul>
+            <li><strong>Choose a category</strong> — the first screen lists every configured category and how many items it holds; click one to open its editor.</li>
+            <li><strong>Add</strong> — inside a category, hold an item on your cursor and click the green <strong>Add Item</strong> button; it is whitelisted under that category.</li>
+            <li><strong>Remove</strong> — left-click any whitelisted item.</li>
+            <li><strong>Navigate</strong> — <em>Back</em> is slot <strong>45</strong> (returns to the category list), <em>Previous Page</em> is slot <strong>48</strong> (hidden on the first page), and <em>Next Page</em> is slot <strong>50</strong> (hidden on the last page), in a 54-slot chest.</li>
+        </ul>
+    </div>
+
+    <div id="commands" class="section">
+        <h2>Commands</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Command</th>
+                    <th>Permission</th>
+                    <th>Who</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/trade</code></td>
+                    <td><code>mctrade.trade</code> (default: all)</td>
+                    <td>Any player</td>
+                    <td>Open the market of all active offers.</td>
+                </tr>
+                <tr>
+                    <td><code>/trade create</code></td>
+                    <td><code>mctrade.trade</code> (default: all)</td>
+                    <td>Any player</td>
+                    <td>Open the creation menu to list a new offer.</td>
+                </tr>
+                <tr>
+                    <td><code>/trade vault</code></td>
+                    <td><code>mctrade.trade</code> (default: all)</td>
+                    <td>Any player</td>
+                    <td>Open your secure vault to claim trade proceeds.</td>
+                </tr>
+                <tr>
+                    <td><code>/trade admin</code></td>
+                    <td><code>mctrade.admin</code> (default: op)</td>
+                    <td>Administrators</td>
+                    <td>Open the whitelist editor.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><small>All actions are driven through chest GUIs, so the commands must be run by a player.</small></p>
+    </div>
+
+    <div id="permissions" class="section">
+        <h2>Permissions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Node</th>
+                    <th>Default</th>
+                    <th>Grants</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>mctrade.trade</code></td>
+                    <td><code>true</code></td>
+                    <td>Opening the market and creating offers.</td>
+                </tr>
+                <tr>
+                    <td><code>mctrade.admin</code></td>
+                    <td><code>op</code></td>
+                    <td>Editing the trade item whitelist.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="architecture" class="section">
+        <h2>Architecture</h2>
+        <p>MCTrade follows the MCHaagenti sub-module architecture; the storage core is pure Java and never touches the Bukkit API, and all storage operations are asynchronous and return a <code>CompletableFuture</code>.</p>
+        <ul>
+            <li><strong><code>api</code></strong> — interfaces and immutable models only (<code>ITradeDatabase</code>, <code>TradeOffer</code>, <code>WhitelistEntry</code>, <code>VaultItem</code>).</li>
+            <li><strong><code>common</code></strong> — storage implementations: a shared <code>AbstractSqlTradeDatabase</code> plus the SQLite, MySQL, and PostgreSQL backends, a native MongoDB backend, and the <code>MCTradeProvider</code> entry point.</li>
+            <li><strong><code>bukkit</code></strong> — SpigotMC-API-only core: the chest GUIs, the <code>TradeService</code> orchestrator, item Base64 (de)serialization and inventory helpers, the whitelist/offer/vault flows, the <code>/trade</code> command, listeners, the cancellable <code>TradeCreateEvent</code>, and a <code>SyncExecutor</code> scheduling abstraction.</li>
+            <li><strong><code>platforms</code></strong> — thin entry points per platform:
+                <ul>
+                    <li><code>spigotmc</code>, <code>papermc</code> — use the regular server scheduler.</li>
+                    <li><code>foliamc</code> — uses a region/entity-aware scheduler so all Bukkit access respects Folia's threading model.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="thread-safety" class="section">
+        <h3>Thread-safety</h3>
+        <p>Database work runs off the server thread. Any result that touches the Bukkit API is scheduled back through a platform-specific <code>SyncExecutor</code> — the main thread on SpigotMC/PaperMC, or the owning region/entity thread on FoliaMC — so inventory mutations always happen on a thread that may legally perform them. Concurrent accepts of the same offer are made safe by an atomic claim (<code>claimOffer</code>): only the caller that actually deletes the row proceeds, preventing a double-spend.</p>
+    </div>
+
+    <div id="database" class="section">
+        <h2>Database</h2>
+        <p>The storage backend is selected via <code>database.type</code> in <code>config.yml</code>. Supported values are <code>sqlite</code> (<strong>default</strong>, zero-configuration), <code>mysql</code>, <code>postgresql</code>, and <code>mongodb</code>. The JDBC drivers and the MongoDB driver are declared as <code>libraries</code> in <code>plugin.yml</code> and downloaded by the server at runtime, so no shading of drivers is required.</p>
+<pre><code>database:
+  type: "sqlite"
+  sqlite:
+    file: "mctrade.db"</code></pre>
+        <p>Three tables (or collections) are created automatically on first start: <code>trade_item_whitelist</code>, <code>trade_offers</code>, and <code>trade_vaults</code>.</p>
+    </div>
+
+    <div id="building" class="section">
+        <h2>Building</h2>
+        <p>This project uses Gradle with the Java 25 toolchain.</p>
+<pre><code>./gradlew build</code></pre>
+        <p>Each platform produces a shaded plugin jar (<code>MCTradeSpigotMC</code>, <code>MCTradePaperMC</code>, <code>MCTradeFoliaMC</code>) via the <code>shadowJar</code> task.</p>
+    </div>
+
+    <div id="getting-started" class="section">
+        <h2>Getting started</h2>
+        <ol>
+            <li>Build the plugin (or drop the jar for your platform into <code>plugins/</code>).</li>
+            <li>Start the server once to generate <code>plugins/MCTrade/config.yml</code>, then set <code>enable: true</code> (and pick a <code>database.type</code> if not using SQLite).</li>
+            <li>As an operator, run <code>/trade admin</code> and whitelist the items you want to be tradeable.</li>
+            <li>Players can now run <code>/trade create</code> to list offers and <code>/trade</code> to browse and accept them.</li>
+        </ol>
+    </div>
+
+    <div id="license" class="section">
+        <h2>License</h2>
+        <p>Copyright (c) 2026 MCHaagenti. All rights reserved.<br>
+        Please see the <a href="LICENSE"><code>LICENSE</code></a> file for details regarding usage and distribution.</p>
+    </div>
+
+</body>
+</html>
