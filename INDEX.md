@@ -8,7 +8,8 @@ This file is the entry point for any agent working in this repository. Read it f
 
 | Path | Purpose |
 |---|---|
-| AGENTS.md | Agent instruction set (workflow, branching, commits, content rules). |
+| AGENTS.md | Universal pointer to the portable `.agents/` instruction set. |
+| .agents/ | Portable agent instruction set (rules, git workflow, architecture). See [`.agents/INDEX.md`](.agents/INDEX.md). |
 | DESIGN.md | Design system: theme tokens, components, motion, and rules for changing the site (a copy of the shared MCEngine "Silver Glass" system). |
 | README.md | Repository overview. |
 | INDEX.md | This file. |
