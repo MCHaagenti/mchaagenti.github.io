@@ -17,6 +17,7 @@ The site is served by GitHub Pages from the `docs/` folder on the default branch
 | Page | Covers |
 |---|---|
 | `/` | The documentation portal, with navigation blocks to every project. |
+| `/mcreport/` | MCReport, the reporting plugin with a native OpenRouter AI assistant. |
 | `/mctrade/` | MCTrade, the item to item trading market. |
 
 ## What it is not

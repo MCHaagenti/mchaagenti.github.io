@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MCReport — a reporting plugin for Minecraft servers with a native OpenRouter AI assistant and semantic search.">
+    <title>MCReport — Minecraft Reporting Plugin</title>
+    <link rel="stylesheet" href="../styles/main/style.css">
+    <link rel="stylesheet" href="../styles/important/main.css">
+    <script src="../scripts/main/script.js" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MCReport</h1>
+
+        <div id="intro" class="section">
+            <h2>Minecraft Reporting Plugin</h2>
+            <p>MCReport is a commercial <strong>reporting plugin</strong> for Minecraft servers, supporting the SpigotMC, PaperMC, and FoliaMC platforms from a single shared core. Players submit reports with one command; staff read them, and can ask a built-in AI assistant to summarize a report or answer questions across every report ever filed.</p>
+
+            <div class="warning">
+                <div class="warning-title">Commercial Software</div>
+                <p>MCReport is published by <strong>MCHaagenti</strong> and is distributed for commercial sale. See the <code>LICENSE</code> file distributed with MCReport for terms.</p>
+            </div>
+        </div>
+
+        <div id="how-it-works" class="section">
+            <h2>How it works</h2>
+            <ol>
+                <li><strong>Submitting.</strong> A player runs <code>/report &lt;message&gt;</code>. The command also works from the <strong>server console</strong>, in which case the report is stored under the reporter UUID <code>console</code>.</li>
+                <li><strong>Vetting.</strong> Each player submission fires a cancellable <code>ReportCreateEvent</code> <strong>before</strong> the report is persisted, so other plugins can veto a report or rewrite its contents. Console submissions have no associated player, so they skip the event.</li>
+                <li><strong>Storing.</strong> The report is written through <code>MCReportProvider</code>. Every method is asynchronous and returns a <code>CompletableFuture</code>, so nothing blocks the server.</li>
+                <li><strong>Indexing.</strong> If an embedding model is configured, the report's contents are embedded in the background and the vector is stored. This is best-effort: it never blocks or fails a submission.</li>
+                <li><strong>Reviewing.</strong> Staff read reports, mark them reviewed, or hand them to the AI assistant for a summary or a question across the whole set.</li>
+            </ol>
+        </div>
+
+        <div id="commands" class="section">
+            <h2>Commands</h2>
+            <ul>
+                <li><strong><code>/report &lt;message&gt;</code></strong> — submit a new report. <em>Any player or console;</em> console submissions are stored under the <code>console</code> UUID.</li>
+                <li><strong><code>/report test ai [tool]</code></strong> — let the built-in AI self-test the plugin commands. With no tool name it tests every tool; with a tool name (tab-completed) it tests only that one. <em>Operators only.</em></li>
+                <li><strong><code>/report summary &lt;report id&gt;</code></strong> — ask the AI to summarize a stored report: who reported it, when, and what it is about. <em>Operators only.</em></li>
+                <li><strong><code>/report ask &lt;prompt&gt;</code></strong> — ask a natural-language question about the stored reports using semantic search. <em>Operators only; disabled unless an embedding model is configured.</em></li>
+                <li><strong><code>/report embed &lt;amount|all&gt;</code></strong> — backfill embeddings for reports stored without one, newest first, ten at a time. <em>Operators only; disabled unless an embedding model is configured.</em></li>
+            </ul>
+        </div>
+
+        <div id="ai-assistant" class="section">
+            <h2>AI assistant</h2>
+            <p>MCReport ships with a <strong>native <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a> integration</strong>. The model is called directly over HTTP from the JDK <code>HttpClient</code> with no third-party AI SDK, and it sits behind the <code>IAIService</code> interface so the backend can be swapped without touching the rest of the plugin.</p>
+            <p>Every tool description sent to the model explicitly states it comes from the MCReport plugin running on a Minecraft server, so the model never assumes it is using its own built-in tooling.</p>
+            <p>Add the following to <code>config.yml</code>. Every player on the server shares this single API key, and the AI sub-commands are restricted to operators:</p>
+            <pre><code>openrouter:
+  models:
+    embed: ""
+    chat: "deepseek/deepseek-v4-flash"
+  token: "your_api_key"</code></pre>
+            <ul>
+                <li><code>models.chat</code> — the chat model used for <code>/report summary</code>, <code>/report test ai</code>, and the answer step of <code>/report ask</code>.</li>
+                <li><code>models.embed</code> — the embedding model used for semantic search. <strong>Leave empty to disable it</strong>; while empty, <code>/report ask</code> and <code>/report embed</code> are disabled and hidden from tab completion.</li>
+                <li><code>token</code> — the shared OpenRouter API key. While left as <code>your_api_key</code> or blank, the AI features stay disabled.</li>
+            </ul>
+        </div>
+
+        <div id="semantic-search" class="section">
+            <h2>Semantic search</h2>
+            <p><code>/report ask &lt;prompt&gt;</code> answers a natural-language question about the stored reports using Retrieval-Augmented Generation:</p>
+            <ol>
+                <li>Every report and every stored embedding for the configured model are loaded.</li>
+                <li>Only the <strong>question</strong> is embedded.</li>
+                <li>Reports that already have a stored vector are ranked by cosine similarity to the question, and the most relevant are kept.</li>
+                <li>Those reports are given to the chat model as grounding context, and its answer is returned.</li>
+            </ol>
+            <p><code>/report ask</code> is <strong>strictly read-only</strong>. It never embeds or persists reports; it only embeds the question. Reports without a stored vector for the configured model are simply ignored, which is what <code>/report embed</code> exists to fix.</p>
+        </div>
+
+        <div id="embeddings" class="section">
+            <h2>Embeddings are stored per model</h2>
+            <p>Embeddings do not live on the report. They live in their own <code>report_embeddings</code> table, keyed by <strong>both</strong> the report and the model that produced the vector:</p>
+            <ul>
+                <li><strong><code>report_id</code></strong> — the report the vector describes. A foreign key, cascading on delete.</li>
+                <li><strong><code>model_name</code></strong> — the model that produced it, as <code>platform/model</code>.</li>
+                <li><strong><code>embedding</code></strong> — the vector, serialized as a JSON array.</li>
+                <li><strong><code>created_at</code></strong> — when the vector was stored.</li>
+            </ul>
+            <p>The primary key is the pair <code>(report_id, model_name)</code>, so <strong>a report can hold one vector per model at the same time</strong>.</p>
+            <p><strong>This is what makes changing embedding model safe.</strong> Server owners run different models, and a model that looks better on paper may turn out worse in practice, or simply cost too much. Point <code>openrouter.models.embed</code> at a different model and the new vectors are written <em>alongside</em> the old ones rather than over them. If the new model does not work out, switch back and the previous vectors are still there — semantic search keeps working immediately, nothing has to be re-embedded, and nothing is paid for twice.</p>
+            <p>Vectors from different models are never mixed. They describe the same reports in different vector spaces and are not comparable, so <code>/report ask</code> only ever reads the vectors belonging to the currently configured model, and <code>/report embed</code> only counts a report as missing if it has no vector <em>for that model</em>.</p>
+            <p>Model identifiers are stored as <code>{platform}/{model}</code> and lowercased before they are written, so one model can never appear under two spellings. A configured model not in that shape is rejected at startup rather than stored — a name that does not match the convention could never be matched again, which would strand every vector written under it.</p>
+        </div>
+
+        <div id="database" class="section">
+            <h2>Database</h2>
+            <p>The storage backend is selected via <code>database.type</code> in <code>config.yml</code>. Supported values are <code>sqlite</code> (<strong>default</strong>, zero-configuration), <code>mysql</code>, <code>postgresql</code>, and <code>mongodb</code>. For SQLite the file name is set under <code>database.sqlite.file</code> (default <code>mcreport.db</code>).</p>
+            <p>Two tables (or collections) are created automatically on first start: <code>reports</code> and <code>report_embeddings</code>.</p>
+        </div>
+
+        <div id="architecture" class="section">
+            <h2>Architecture</h2>
+            <p>MCReport follows the MCHaagenti sub-module architecture; the storage core is pure Java and never touches the Bukkit API, and all storage operations are asynchronous and return a <code>CompletableFuture</code>.</p>
+            <ul>
+                <li><strong><code>api</code></strong> — interfaces and immutable models only (<code>IReportDatabase</code>, <code>IAIService</code>, <code>AITool</code>, <code>Report</code>).</li>
+                <li><strong><code>common</code></strong> — storage implementations: a shared <code>AbstractSqlReportDatabase</code> plus the SQLite, MySQL, and PostgreSQL backends, a native MongoDB backend, the native OpenRouter client, the semantic search logic, and the <code>MCReportProvider</code> entry point.</li>
+                <li><strong><code>bukkit</code></strong> — SpigotMC-API-only core: the <code>/report</code> command, the cancellable <code>ReportCreateEvent</code>, the <code>SyncExecutor</code> scheduling abstraction, and <code>AbstractMCReportPlugin</code>, which holds the whole bootstrap.</li>
+                <li><strong><code>platforms</code></strong> — thin entry points per platform:
+                    <ul>
+                        <li><code>spigotmc</code>, <code>papermc</code> — use the regular server scheduler.</li>
+                        <li><code>foliamc</code> — uses a region/entity-aware scheduler so all Bukkit access respects Folia's threading model.</li>
+                        <li><code>engine</code> — the universal jar; see below.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div id="thread-safety" class="section">
+            <h2>Thread-safety</h2>
+            <p>Database and AI work runs off the server thread. Any result that touches the Bukkit API — including every reply a command sends — is scheduled back through a platform-specific <code>SyncExecutor</code>: the main thread on SpigotMC and PaperMC, or the owning region or entity thread on FoliaMC. On Folia there is no main thread at all, so a reply sent straight from a completion callback would be touching a player from a thread that does not own them.</p>
+        </div>
+
+        <div id="one-jar" class="section">
+            <h2>One jar for every platform</h2>
+            <p>MCReport ships as a <strong>single universal jar</strong>. There is no separate SpigotMC, PaperMC, or FoliaMC download to choose between.</p>
+            <p>The jar bundles all three platform modules and detects the running server at enable time, probing for Folia's regionised server class first, then Paper's configuration class, falling back to Spigot. It then installs the matching scheduler and writes the platform it found to the server log.</p>
+        </div>
+
+        <div id="building" class="section">
+            <h2>Building</h2>
+            <p>This project uses Gradle with the Java 25 toolchain. Building with the <code>shadowJar</code> task on <code>platforms:engine</code> produces the universal <code>MCReport</code> jar. The per-platform modules still build, but they are inputs to that jar rather than artifacts to distribute.</p>
+        </div>
+
+        <div id="getting-started" class="section">
+            <h2>Getting started</h2>
+            <ol>
+                <li>Drop the <code>MCReport</code> jar into <code>plugins/</code>.</li>
+                <li>Start the server once to generate <code>plugins/MCReport/config.yml</code>, then set <code>enable: true</code> (and pick a <code>database.type</code> if not using SQLite).</li>
+                <li>Players can now run <code>/report &lt;message&gt;</code>.</li>
+                <li><em>Optional:</em> set <code>openrouter.token</code> and <code>openrouter.models.chat</code> to enable the AI assistant, and <code>openrouter.models.embed</code> to enable semantic search.</li>
+            </ol>
+        </div>
+
+        <div id="license" class="section">
+            <h2>License</h2>
+            <p>Copyright (c) 2026 MCHaagenti. All rights reserved.<br>
+            Please see the <code>LICENSE</code> file distributed with MCReport for details regarding usage and distribution.</p>
+        </div>
+
+        <h2>Explore</h2>
+        <div class="blocks">
+            <a class="block" href="../">
+                <div class="block-title">MCHaagenti</div>
+                <p>Back to the documentation portal.</p>
+            </a>
+            <a class="block" href="../mctrade/">
+                <div class="block-title">MCTrade</div>
+                <p>The item-to-item trading market.</p>
+            </a>
+            <a class="block" href="https://mcengine.github.io/">
+                <div class="block-title">MCEngine</div>
+                <p>The MCEngine ecosystem homepage.</p>
+            </a>
+        </div>
+
+        <div class="footer">&copy; 2026 MCHaagenti. All rights reserved.</div>
+    </div>
+
+</body>
+</html>

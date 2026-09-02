@@ -97,10 +97,11 @@
                 <li><strong><code>api</code></strong> — interfaces and immutable models only (<code>ITradeDatabase</code>, <code>TradeOffer</code>, <code>WhitelistEntry</code>, <code>VaultItem</code>).</li>
                 <li><strong><code>common</code></strong> — storage implementations: a shared <code>AbstractSqlTradeDatabase</code> plus the SQLite, MySQL, and PostgreSQL backends, a native MongoDB backend, and the <code>MCTradeProvider</code> entry point.</li>
                 <li><strong><code>bukkit</code></strong> — SpigotMC-API-only core: the chest GUIs, the <code>TradeService</code> orchestrator, item Base64 (de)serialization and inventory helpers, the whitelist/offer/vault flows, the <code>/trade</code> command, listeners, the cancellable <code>TradeCreateEvent</code>, and a <code>SyncExecutor</code> scheduling abstraction.</li>
-                <li><strong><code>platforms</code></strong> — thin entry points per platform:
+                <li><strong><code>platforms</code></strong> — thin entry points per platform. Each supplies only its <code>SyncExecutor</code>; the whole bootstrap lives in <code>AbstractMCTradePlugin</code>.
                     <ul>
                         <li><code>spigotmc</code>, <code>papermc</code> — use the regular server scheduler.</li>
                         <li><code>foliamc</code> — uses a region/entity-aware scheduler so all Bukkit access respects Folia's threading model.</li>
+                        <li><code>engine</code> — the universal jar; see below.</li>
                     </ul>
                 </li>
             </ul>
@@ -117,15 +118,21 @@
             <p>Three tables (or collections) are created automatically on first start: <code>trade_item_whitelist</code>, <code>trade_offers</code>, and <code>trade_vaults</code>.</p>
         </div>
 
+        <div id="one-jar" class="section">
+            <h2>One jar for every platform</h2>
+            <p>MCTrade ships as a <strong>single universal jar</strong>. There is no separate SpigotMC, PaperMC, or FoliaMC download to choose between.</p>
+            <p>The jar bundles all three platform modules and detects the running server at enable time, probing for Folia's regionised server class first, then Paper's configuration class, falling back to Spigot. It then installs the matching scheduler and writes the platform it found to the server log.</p>
+        </div>
+
         <div id="building" class="section">
             <h2>Building</h2>
-            <p>This project uses Gradle with the Java 25 toolchain; building the project with the <code>shadowJar</code> task produces a shaded plugin jar per platform (<code>MCTradeSpigotMC</code>, <code>MCTradePaperMC</code>, <code>MCTradeFoliaMC</code>).</p>
+            <p>This project uses Gradle with the Java 25 toolchain. Building with the <code>shadowJar</code> task on <code>platforms:engine</code> produces the universal <code>MCTrade</code> jar. The per-platform modules still build, but they are inputs to that jar rather than artifacts to distribute.</p>
         </div>
 
         <div id="getting-started" class="section">
             <h2>Getting started</h2>
             <ol>
-                <li>Build the plugin (or drop the jar for your platform into <code>plugins/</code>).</li>
+                <li>Drop the <code>MCTrade</code> jar into <code>plugins/</code>.</li>
                 <li>Start the server once to generate <code>plugins/MCTrade/config.yml</code>, then set <code>enable: true</code> (and pick a <code>database.type</code> if not using SQLite).</li>
                 <li>As an operator, run <code>/trade admin</code> and whitelist the items you want to be tradeable.</li>
                 <li>Players can now run <code>/trade create</code> to list offers and <code>/trade</code> to browse and accept them.</li>
@@ -143,6 +150,10 @@
             <a class="block" href="../">
                 <div class="block-title">MCHaagenti</div>
                 <p>Back to the documentation portal.</p>
+            </a>
+            <a class="block" href="../mcreport/">
+                <div class="block-title">MCReport</div>
+                <p>The reporting plugin with an AI assistant.</p>
             </a>
             <a class="block" href="https://mcengine.github.io/">
                 <div class="block-title">MCEngine</div>
