@@ -86,3 +86,22 @@ version lives in `MCEngine/mcengine.github.io`. Both tables were converted to th
 site structure page and the agent map so the next person does not rediscover it.
 
 All three pages were parsed and confirmed well formed, and every internal link resolves.
+
+### Task 3 — chore/site-context-release
+
+Closed out the work. Added `wiki/logs/0/1/1/CHANGELOG.md` and registered it in
+`logs-index.md` in the same commit, with the current version updated to `0.1.1`.
+
+`0.1.1` is a patch: pages were added and existing ones extended, but nothing structural
+changed and no theme file was touched. The version lives only in `logs-index.md`, since this
+repository has no package manifest.
+
+`wiki/logs/0/1/0/` was not deleted; a released version directory never is.
+
+Verification: all three pages parse as well formed HTML, every internal link resolves,
+nothing under `docs/styles/` or `docs/scripts/` changed, and the instruction set passes
+every structural check.
+
+## Status
+
+Work complete. Three branches stacked in order.
