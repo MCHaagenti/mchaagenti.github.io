@@ -15,6 +15,7 @@ would want are in [`../../../wiki/`](../../../wiki/), linked rather than repeate
 |---|---|
 | `docs/` | The published site. GitHub Pages serves this folder directly. |
 | `docs/index.html` | The portal homepage, with navigation blocks to every project. |
+| `docs/mcreport/index.html` | The MCReport documentation page. |
 | `docs/mctrade/index.html` | The MCTrade documentation page. |
 | `docs/styles/main/style.css` | Vendored shared theme: tokens, components, page transitions. |
 | `docs/styles/important/main.css` | Vendored centered container card layout. |
@@ -37,6 +38,9 @@ claim tests passed; say plainly that none exist.
 * **The theme is vendored, not linked.** Every page references `docs/styles/` and
   `docs/scripts/` with relative paths. A network import or a raw content URL breaks the
   repository's independence from `MCEngine/mcengine.github.io`.
+* **The theme styles no tables.** A `<table>` renders unstyled against the Silver Glass
+  system. Use the `ul` with `strong code` idiom the existing pages use, rather than adding
+  table CSS, which would be a local change to the design system.
 * **`DESIGN.md` is a synchronized copy**, not this repository's invention. Changing the
   visual language here without changing the canonical copy puts the two out of step.
 * Pages are explanatory. Source code listings belong in the project repositories.
