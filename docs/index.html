@@ -3,50 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MCHaagenti — official documentation portal.">
-    <title>MCHaagenti - Documentation Portal</title>
-    <link rel="stylesheet" href="styles/main/style.css">
-    <link rel="stylesheet" href="styles/important/main.css">
-    <script src="scripts/main/script.js" defer></script>
+    <meta name="description" content="MCHaagenti — official documentation portal for commercial Minecraft server plugins.">
+    <title>MCHaagenti — Documentation Portal</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/shared/layout.css">
+    <link rel="stylesheet" href="css/shared/components.css">
+    <script>window.SITE_ROOT = ""; window.PAGE_SECTION = "home";</script>
+    <script src="js/site.js" defer></script>
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="site-header"></div>
 
-    <div class="container">
-        <h1>MCHaagenti Projects</h1>
+    <main id="main">
+        <div class="container">
+            <div class="hero">
+                <span class="eyebrow">Documentation portal</span>
+                <h1>MCHaagenti Projects</h1>
+                <p class="lead">Commercial plugins for Minecraft servers. Each supports SpigotMC, PaperMC, and FoliaMC from one shared core, and ships as a single universal jar that detects the server it is running on.</p>
+                <div class="btn-row">
+                    <a class="btn btn--primary" href="mcreport/">Read MCReport docs</a>
+                    <a class="btn" href="mctrade/">Read MCTrade docs</a>
+                </div>
+            </div>
 
-        <h2>About</h2>
-        <ul>
-            <li>Welcome to the official MCHaagenti documentation portal.</li>
-            <li>MCHaagenti builds commercial plugins for Minecraft servers, each supporting SpigotMC, PaperMC, and FoliaMC from one shared core and shipping as a <strong>single universal jar</strong> that detects the server it is running on.</li>
-            <li>Select a project below to read its documentation.</li>
-        </ul>
+            <div class="section">
+                <h2>Projects</h2>
+                <div class="card-grid">
+                    <a class="card" href="mcreport/">
+                        <div class="card__icon" aria-hidden="true">&#128221;</div>
+                        <div class="card__title">MCReport</div>
+                        <p class="card__desc">A reporting plugin with a native OpenRouter AI assistant and semantic search across every report ever filed.</p>
+                        <span class="card__more">Read the docs &rarr;</span>
+                    </a>
+                    <a class="card" href="mctrade/">
+                        <div class="card__icon" aria-hidden="true">&#128176;</div>
+                        <div class="card__title">MCTrade</div>
+                        <p class="card__desc">An asynchronous item-to-item trading market, with an atomic offer claim and a secure vault for proceeds.</p>
+                        <span class="card__more">Read the docs &rarr;</span>
+                    </a>
+                </div>
+            </div>
 
-        <h2>Projects</h2>
-        <div class="blocks">
-            <a class="block" href="mcreport/">
-                <div class="block-title">MCReport</div>
-                <p>A reporting plugin with a native OpenRouter AI assistant and semantic search over every report.</p>
-            </a>
-            <a class="block" href="mctrade/">
-                <div class="block-title">MCTrade</div>
-                <p>An asynchronous item-to-item trading market for Minecraft servers.</p>
-            </a>
+            <div class="section">
+                <h2>What every plugin shares</h2>
+                <ul class="feature-list">
+                    <li><strong>One universal jar.</strong> No separate SpigotMC, PaperMC, or FoliaMC download. The jar detects the running server at enable time and installs the matching scheduler.</li>
+                    <li><strong>Asynchronous by default.</strong> Storage never blocks the server thread, and anything touching the Bukkit API is scheduled back onto a thread allowed to touch it.</li>
+                    <li><strong>Pluggable storage.</strong> SQLite, MySQL, PostgreSQL, or MongoDB, with drivers resolved at runtime rather than shaded into the jar.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Elsewhere</h2>
+                <div class="card-grid">
+                    <a class="card" href="https://github.com/MCHaagenti" target="_blank" rel="noopener">
+                        <div class="card__title">GitHub</div>
+                        <p class="card__desc">The MCHaagenti organization.</p>
+                    </a>
+                    <a class="card" href="https://mcengine.github.io/" target="_blank" rel="noopener">
+                        <div class="card__title">MCEngine</div>
+                        <p class="card__desc">The MCEngine ecosystem homepage.</p>
+                    </a>
+                </div>
+            </div>
         </div>
+    </main>
 
-        <h2>Explore</h2>
-        <div class="blocks">
-            <a class="block" href="https://mcengine.github.io/">
-                <div class="block-title">MCEngine</div>
-                <p>The MCEngine ecosystem homepage.</p>
-            </a>
-            <a class="block" href="https://github.com/MCHaagenti" target="_blank" rel="noopener">
-                <div class="block-title">GitHub</div>
-                <p>The MCHaagenti organization on GitHub.</p>
-            </a>
-        </div>
-
-        <div class="footer">&copy; 2026 MCHaagenti. All rights reserved.</div>
-    </div>
-
+    <div id="site-footer"></div>
 </body>
 </html>

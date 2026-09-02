@@ -157,3 +157,37 @@ is unchanged while the emitted links are `./`, `./mcreport/`, `./mctrade/`.
 
 The old `docs/styles/` and `docs/scripts/` are still present and still referenced by the
 three pages; task 4 rebuilds the pages and removes them.
+
+### Task 4 — refactor/site-pages
+
+Rebuilt all three pages on the component classes and deleted `docs/styles/` and
+`docs/scripts/`.
+
+Each page now sets `SITE_ROOT` and `PAGE_SECTION`, links the three layers in the
+prescribed order, carries a skip link and `<main id="main">`, and mounts the header and
+footer. The project pages gained breadcrumbs and a hero; the old `.blocks`/`.block` became
+`.card-grid`/`.card`, and `.warning` became `.callout--warn`.
+
+**A regression I caught and repaired rather than shipped.** Converting the pages replaced
+the `#intro` section with the hero, and the "Commercial Software" notice lived inside it —
+so both project pages briefly lost their licensing notice. Restored as a proper
+`.callout--warn`, with MCTrade's paid-tier note intact.
+
+**A real visual bug, found only because the page was actually rendered.** The hero's
+radial glow is a `::after`, which is generated as the last child and therefore painted
+*over* the positioned heading, washing the text out. Structural checks pass either way; a
+screenshot does not. `.hero > *` now carries `z-index: 1`, with a comment saying the
+z-index is load-bearing so nobody removes it as decoration.
+
+**Verified in Chromium against the served site**, all three pages: header and footer
+inject, the active nav link is correct per page, exactly one `<h1>`, all four landmarks
+present, **no `{{ROOT}}` survives**, no horizontal page scroll, no console errors, no
+failed requests.
+
+At a 390px viewport the mobile menu opens and the panel computes to
+`rgba(255, 255, 255, 0.98)` with `backdrop-filter: none` — the opaque-overlay rule
+confirmed at the breakpoint where it matters, not merely written in the stylesheet.
+
+Two static checks also hold: every class used in the HTML is defined in the CSS, and the
+only external references anywhere are `<a href>` navigation links — no external
+stylesheet, script, or font, so principle 1.1 holds.

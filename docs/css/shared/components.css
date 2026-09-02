@@ -32,7 +32,13 @@
 }
 
 .hero > * {
+    /*
+     * z-index is load-bearing, not decoration. ::after is generated as the last
+     * child, so without an explicit stacking order the radial glow paints over
+     * the heading and washes the text out.
+     */
     position: relative;
+    z-index: 1;
 }
 
 .hero h1 {
