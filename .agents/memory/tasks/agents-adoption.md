@@ -1,6 +1,6 @@
 ---
 name: memory-tasks-agents-adoption
-description: Task record for adopting the shared agent instruction set in the MCHaagenti portal — the confirmed plan, the branches, and what each task landed.
+description: Task record for adopting the shared instruction set in the MCHaagenti portal — the plan, the branches, and what each task landed.
 ---
 
 # Task — Adopt the shared agent instruction set
@@ -91,3 +91,35 @@ shared set.
 Created this record with the confirmed task list, the decisions behind it, and the four
 audit verdicts task 4 will apply. No other file touched; `.agents/memory/` did not exist
 in this repository before this commit.
+
+### Task 2 — docs/agents-setup
+
+Adopted the shared set as a Mode B consumer.
+
+Added the root `AGENTS.md` entry point with the connector bootstrap verbatim, the six
+scope indexes under `.agents/index/`, a rewritten `rules/repository.md`, the agent
+orientation page at `.agents/wiki/context/repository-map.md`, seed state memory, three
+human wiki pages, and the `LICENSE` this repository had never carried.
+
+Deleted the root `INDEX.md`, `.agents/INDEX.md`, and the four per folder `README.md`
+overview files. All six were routing, and the index set replaces them; none was an audit
+deletion.
+
+`README.md` was a bare title. It now carries the project hosting block that
+`rules/iron.md` requires — the rule was in the repository but the repository did not
+satisfy it.
+
+`architecture/website.md` described an `INDEX.md` in its repository tree. Since this
+commit removes that file, the diagram was corrected in the same commit rather than left
+to go stale.
+
+`docs/` was not touched. It is the published GitHub Pages artifact, not a documentation
+tree, and the new `wiki/` sits alongside it.
+
+Left in place deliberately: `git/workflow.md`, `architecture/index-template.md`,
+`architecture/agent-directories.md`, and `rules/execution.md`, all listed in
+`agents-index.md` under a pending removal heading. Until task 4 runs, the repository still
+fails the consumer check on `.agents/git/`.
+
+Task 3 depends on the rewritten `AGENTS.md`, which is what `.claude/CLAUDE.md` will
+import.
