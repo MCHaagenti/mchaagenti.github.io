@@ -1,3 +1,8 @@
+---
+name: iron-rules
+description: Hosting facts every MCHaagenti repository must state — the platform for each repo, and where README.md must record it.
+---
+
 # Iron Rules
 
 * **Platform Specification:** Whether working with a single repository or multiple repositories, the user must explicitly specify the cloud hosting platform for each repository. For example:
