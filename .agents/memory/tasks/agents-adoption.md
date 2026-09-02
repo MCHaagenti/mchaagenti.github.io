@@ -123,3 +123,12 @@ fails the consumer check on `.agents/git/`.
 
 Task 3 depends on the rewritten `AGENTS.md`, which is what `.claude/CLAUDE.md` will
 import.
+
+### Task 3 — chore/agent-harness-pointers
+
+Added `.claude/CLAUDE.md` containing a single `@../AGENTS.md` import and a comment
+explaining why it is only an import.
+
+Nothing was deleted here. Unlike `report` and `trade`, this repository never had a root
+`CLAUDE.md` or a `.windsurfrules`, so this task only adds the import that brings it into
+line with its siblings.
