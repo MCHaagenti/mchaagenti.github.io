@@ -42,15 +42,14 @@ carries its own record; memory is never shared between them.
 
 | # | Title | Scope | Branch | PR |
 |---|---|---|---|---|
-| 1 | Task record | This file — the confirmed plan, before any work | `chore/agents-adoption-plan` | pending |
-| 2 | Adopt shared set | Mode B tree, legacy routing removed, LICENSE added | `docs/agents-setup` | pending |
-| 3 | Harness pointers | Add the Claude Code import | `chore/agent-harness-pointers` | pending |
-| 4 | Duplicate cleanup | Delete instructions shadowing or contradicting the shared set | `chore/agents-duplicate-cleanup` | pending |
-| 5 | Release | Changelog, index rows, close this record | `chore/agents-adoption-release` | pending |
+| 1 | Task record | This file — the confirmed plan, before any work | `chore/agents-adoption-plan` | #8 |
+| 2 | Adopt shared set | Mode B tree, legacy routing removed, LICENSE added | `docs/agents-setup` | #9 |
+| 3 | Harness pointers | Add the Claude Code import | `chore/agent-harness-pointers` | #10 |
+| 4 | Duplicate cleanup | Delete instructions shadowing or contradicting the shared set | `chore/agents-duplicate-cleanup` | #11 |
+| 5 | Release | Changelog, index rows, close this record | `chore/agents-adoption-release` | #12 |
 
-Pull request numbers are filled in once every branch is pushed and its pull request
-opened. They cannot exist before that, so the column is completed in a follow up commit on
-the release branch — which rebases nothing, since nothing stacks above it.
+Pull requests opened in order and left unmerged, as instructed. Pull request 8 is the
+index of the chain; its body carries every branch and its number.
 
 ## Decisions
 
