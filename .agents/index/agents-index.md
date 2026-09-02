@@ -19,6 +19,12 @@ index lists local files only; the shared set is reached through
 | [`../rules/repository.md`](../rules/repository.md) | How this site is built, served, and bounded — the first local file to read. |
 | [`../rules/iron.md`](../rules/iron.md) | Hosting facts every repository must state, and where `README.md` records them. |
 
+## design/
+
+| File | Purpose |
+|---|---|
+| [`../design/silver-glass.md`](../design/silver-glass.md) | The design system as binding rules: tokens, the glass recipe, the opaque-overlay rule, components, and layers. |
+
 ## architecture/
 
 | File | Purpose |
