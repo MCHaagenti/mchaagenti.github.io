@@ -1,0 +1,235 @@
+/*
+ * Silver Glass — root tokens and base element styles.
+ *
+ * This is layer 1 of the design system documented in DESIGN.md. Every colour,
+ * radius, shadow, and spacing decision in the site resolves to a token declared
+ * here; components never hard-code a value.
+ *
+ * To rebrand, edit the tokens in this file and nothing else. The --glass-*,
+ * shadow, and geometry tokens are what give the system its feel — change the
+ * --silver-*, --accent*, and body gradient to move off silver, and leave the
+ * rest alone.
+ */
+
+:root {
+    /* --- Palette: white & silver --- */
+    --white: #ffffff;
+    --silver-050: #f6f8fb;
+    --silver-100: #eef1f6;
+    --silver-200: #e2e7ee;
+    --silver-300: #d2d9e3;
+    --silver-400: #b9c2d0;
+    --silver-500: #9aa6b8;
+    --silver-600: #78859a;
+
+    /* --- Ink: text --- */
+    --ink-900: #1b2430;
+    --ink-700: #333f4f;
+    --ink-500: #5a6676;
+    --ink-400: #78859a;
+
+    /* --- Accent & intent --- */
+    --accent: #5b7189;
+    --accent-strong: #3f5872;
+    --accent-soft: rgba(91, 113, 137, .12);
+    --sponsor: #d6336c;
+    --sponsor-soft: rgba(214, 51, 108, .10);
+    --ok: #1f7a54;
+    --warn: #9a6b16;
+
+    /* --- Transparent glass surfaces --- */
+    --glass: rgba(255, 255, 255, .62);
+    --glass-strong: rgba(255, 255, 255, .90);
+    --glass-faint: rgba(255, 255, 255, .40);
+    --glass-border: rgba(255, 255, 255, .75);
+    --hairline: rgba(120, 133, 154, .28);
+    --surface-solid: rgba(255, 255, 255, .98);
+    --blur: saturate(160%) blur(14px);
+
+    /* --- Shadows --- */
+    --shadow-sm: 0 1px 2px rgba(27, 36, 48, .06), 0 2px 8px rgba(27, 36, 48, .05);
+    --shadow-md: 0 6px 22px rgba(27, 36, 48, .10);
+    --shadow-lg: 0 18px 48px rgba(27, 36, 48, .16);
+
+    /* --- Geometry --- */
+    --radius-sm: 10px;
+    --radius: 16px;
+    --radius-lg: 22px;
+    --maxw: 1120px;
+    --header-h: 64px;
+
+    /* --- Type --- */
+    /*
+     * Backdrop gradient stops. Named so a rebrand can reach them from :root
+     * (DESIGN.md section 8) rather than hunting a literal inside the body rule,
+     * and so no hex escapes :root (principle 1.2).
+     */
+    --backdrop-start: #eef1f6;
+    --backdrop-end: #dbe1ea;
+    --backdrop-glow: rgba(210, 217, 227, .70);
+
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-700);
+
+    /*
+     * The backdrop: soft white highlights top-left and top-right, a light silver
+     * wash toward the bottom, over a silver gradient. Fixed, so content scrolls
+     * over a stable field rather than dragging the gradient with it.
+     */
+    background-color: var(--silver-100);
+    background-image:
+        radial-gradient(60rem 40rem at 8% -10%, rgba(255, 255, 255, .95), transparent 60%),
+        radial-gradient(50rem 34rem at 100% 0%, rgba(255, 255, 255, .80), transparent 60%),
+        radial-gradient(70rem 46rem at 50% 120%, var(--backdrop-glow), transparent 60%),
+        linear-gradient(160deg, var(--backdrop-start) 0%, var(--backdrop-end) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: var(--ink-900);
+    line-height: 1.25;
+    margin: 0 0 .6em;
+    font-weight: 650;
+    letter-spacing: -.011em;
+}
+
+h1 {
+    font-size: clamp(1.9rem, 1.3rem + 2.2vw, 2.7rem);
+}
+
+h2 {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+}
+
+h3 {
+    font-size: 1.15rem;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+ul,
+ol {
+    margin: 0 0 1rem;
+    padding-left: 1.35rem;
+}
+
+li {
+    margin: .3rem 0;
+}
+
+li > ul,
+li > ol {
+    margin-top: .3rem;
+}
+
+a {
+    color: var(--accent-strong);
+    text-decoration-color: var(--hairline);
+    text-underline-offset: .18em;
+}
+
+a:hover {
+    text-decoration-color: currentColor;
+}
+
+strong {
+    color: var(--ink-900);
+    font-weight: 650;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--hairline);
+    margin: 2rem 0;
+}
+
+blockquote {
+    margin: 0 0 1rem;
+    padding: .1rem 0 .1rem 1rem;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-500);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Visible keyboard focus everywhere, per the accessibility checklist. */
+:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Skip link for keyboard and screen reader users. */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: .6rem 1rem;
+    background: var(--white);
+    border-radius: 0 0 var(--radius-sm) 0;
+    box-shadow: var(--shadow-md);
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
+
+.container.narrow {
+    max-width: 880px;
+}
+
+main {
+    display: block;
+    padding: 2.25rem 0 3.5rem;
+}

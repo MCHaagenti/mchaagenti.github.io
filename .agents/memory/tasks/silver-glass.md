@@ -82,3 +82,35 @@ partials will have none, so they should pass through untouched. There is no
 
 Created this record with the confirmed task list, the survey that motivated it, and the
 decisions behind it. No other file touched.
+
+### Task 2 — feat/design-tokens
+
+Added `docs/css/main.css` — layer 1 of the system — and the design system in the
+instruction set.
+
+**All 34 tokens named in `DESIGN.md` are now defined**, checked programmatically rather
+than by eye: the check extracts every `--token` mentioned anywhere in the document and
+asserts each is declared in `main.css`. Before this commit, zero of them existed.
+
+Three tokens were added beyond the document: `--ok` and `--warn`, which `DESIGN.md` names
+in prose as intent colours without giving them a table row, and `--backdrop-start` /
+`--backdrop-end` / `--backdrop-glow`.
+
+The backdrop tokens exist for a reason worth recording. The document writes the backdrop
+as `linear-gradient(160deg, #eef1f6 → #dbe1ea)`, and transcribing that literally left two
+hard-coded hex values in the `body` rule — which principle 1.2 forbids, and which would
+have made section 8's "adjust the body background gradient" a hunt through a rule instead
+of an edit on `:root`. Naming them satisfies the principle and makes the rebrand
+instruction true. The check now asserts **no hex appears outside `:root` at all**.
+
+Also in this commit: base element styles, the fixed layered backdrop, `:focus-visible`, a
+skip link, `.container` with its `.narrow` variant, and a `prefers-reduced-motion` block.
+
+`.agents/design/silver-glass.md` carries the system as rules rather than reference —
+what an agent must obey, with the reasoning kept for the two rules that look arbitrary
+without it: why content-covering overlays must be opaque, and why a partial must never
+carry front matter. It is wired into the trigger table, the agents index, and
+`repository.md`, so it fires when CSS is touched rather than sitting unread.
+
+The old `docs/styles/` is untouched and still live; task 4 removes it once the pages no
+longer reference it.

@@ -38,6 +38,10 @@ with the canonical `DESIGN.md` in `MCEngine/mcengine.github.io`. **Never change 
 style beyond what `DESIGN.md` allows.** The layout the site follows is in
 [`../architecture/website.md`](../architecture/website.md).
 
+The same system in its normative form, which is what an agent is routed to and must obey,
+is [`../design/silver-glass.md`](../design/silver-glass.md). The two describe one system
+and change together; where they disagree, `DESIGN.md` wins.
+
 ## Content
 
 Pages must stay explanatory. Do not embed source code listings inside the website pages;

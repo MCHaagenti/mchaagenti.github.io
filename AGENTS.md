@@ -104,6 +104,7 @@ the divider mirror it; the rows below it are this repository's own.
 | Need project facts, commands, or orientation | `.agents/wiki/context/repository-map.md` |
 | Do anything at all in this project | `.agents/rules/repository.md` |
 | Add a page, a stylesheet, or a script under `docs/` | `.agents/architecture/website.md` |
+| Write or change any CSS, or add a component or page to the site | `.agents/design/silver-glass.md` |
 | State or verify where a repository is hosted | `.agents/rules/iron.md` |
 
 ## Reading Order
