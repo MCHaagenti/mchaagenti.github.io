@@ -191,3 +191,27 @@ confirmed at the breakpoint where it matters, not merely written in the styleshe
 Two static checks also hold: every class used in the HTML is defined in the CSS, and the
 only external references anywhere are `<a href>` navigation links — no external
 stylesheet, script, or font, so principle 1.1 holds.
+
+### Task 5 — chore/silver-glass-release
+
+Closed out the work at `0.2.0` — a minor bump: a whole subsystem was added and the pages
+rebuilt, but nothing about the site's purpose or structure changed and no content was lost.
+
+`wiki/logs/0/1/0/` and `0/1/1/` are not deleted; a released version directory never is.
+
+The Jekyll risk recorded in task 1 is **resolved, not merely unencountered**: partials carry
+no front matter, so Liquid never processes them, and the rendered DOM was checked for a
+surviving `{{ROOT}}` on all three pages. The rule is written into
+`.agents/design/silver-glass.md` and the repository map so the next person does not add
+front matter and quietly break every internal link in the chrome.
+
+## Status
+
+Work complete. Five branches stacked in order.
+
+## What a reviewer should look at with their own eyes
+
+Everything here was verified structurally and in a headless browser, including screenshots
+at 1280px and 390px. What that cannot settle is taste: whether the silver field, the glass
+tint, and the spacing read the way the design system intends on a real display. That
+judgement is the user's.
