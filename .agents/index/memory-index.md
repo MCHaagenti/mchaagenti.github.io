@@ -22,5 +22,6 @@ scope is reflected here in the same commit.
 
 | File | Purpose |
 |---|---|
+| [`../memory/tasks/silver-glass.md`](../memory/tasks/silver-glass.md) | Implementing the Silver Glass design system the portal documented but never built. |
 | [`../memory/tasks/site-context.md`](../memory/tasks/site-context.md) | The MCReport page, the universal jar, and per-model embeddings on the portal. |
 | [`../memory/tasks/agents-adoption.md`](../memory/tasks/agents-adoption.md) | Adoption of the shared instruction set: plan, decisions, audit verdicts, and per task progress. |
