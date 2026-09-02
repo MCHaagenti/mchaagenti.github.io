@@ -27,16 +27,17 @@ bump on every pull request where the shared rule forbids bumping unasked.
 
 ## What exists on the site
 
-Two pages: the portal homepage and an MCTrade page. `report` has no page yet, which is the
-most visible content gap.
+Three pages: the portal homepage, an MCReport page, and an MCTrade page. Both project pages
+document the universal jar each plugin now ships as, and cross link each other.
 
 ## What does not exist
 
 * No test suite, no build, and no CI workflow under `.github/`.
 * No declared shared overrides.
-* No page for MCReport.
+* No page for any project other than MCReport and MCTrade.
 
 ## Next obvious step
 
-Add a `docs/mcreport/index.html` page. The portal documents MCTrade but not MCReport, and
-the sibling repository is now documented well enough in its own `wiki/` to draw from.
+Both plugins are documented and both are at 1.0.0. The gap worth closing next is that the
+site has no way to state which plugin version a page describes, so a reader cannot tell
+whether the page matches the jar they downloaded.
