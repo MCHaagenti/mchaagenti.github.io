@@ -122,6 +122,24 @@ is forbidden by [`../rules/repository.md`](../rules/repository.md).
 Because the loader uses `fetch()`, the site must be served over HTTP to test. Opening a
 page from the filesystem leaves the header and footer empty.
 
+## Layout traps that fail silently
+
+CSS drops an invalid declaration **without any error**: nothing throws, nothing is logged,
+and the page still renders. Structural checks cannot see it. Two rules follow.
+
+* **Never combine an auto-repeat with a flexible or intrinsic track elsewhere in the same
+  track list.** `1.4fr repeat(auto-fit, minmax(150px, 1fr))` is invalid, so the whole
+  `grid-template-columns` is discarded and the grid collapses to one implicit column. This
+  is exactly what stacked the footer. `repeat(auto-fill, minmax(248px, 1fr))` on its own is
+  valid and is the intended responsive idiom — the `fr` there is inside the repeat.
+* **`flex-basis` sizes the main axis.** Once a container is `flex-direction: column` the
+  main axis is vertical, so a basis meant as a width becomes a height and opens dead space.
+  Reset it in the media query that flips the direction.
+
+**Run `node tools/check-layout.mjs` after changing any layout rule.** It asserts computed
+geometry and audits the stylesheets for the track-list trap above. It is the check that
+would have caught the footer.
+
 ## Accessibility
 
 * Landmarks and one `<h1>` per page.

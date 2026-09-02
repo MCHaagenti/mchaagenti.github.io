@@ -75,3 +75,27 @@ why, because the rule looks removable and is not.
 
 Created this record with the cause, the confirmed plan, and the note on why the earlier
 verification passed while the layout was wrong. No other file touched.
+
+### Task 2 — fix/footer-row
+
+Replaced the invalid grid with flex, added the `.site-footer__intro` class the brand block
+needed, reset the basis in the mobile media query, and added `tools/check-layout.mjs`.
+
+Both CSS comments explain themselves, because both rules look removable and are not: the
+flex block records that the previous track list was invalid rather than merely different,
+and the mobile reset records that `flex-basis` sizes the main axis once the direction is
+column.
+
+**The check was tested against the bug, not just written.** With the fix reverted it fails
+twice over — the stylesheet audit flags
+`1.4fr repeat(auto-fit, minmax(150px, 1fr))`, and the geometry check reports "3 children
+across 3 row(s)" — and exits non-zero. With the fix in place every assertion passes.
+
+Writing it also surfaced a flaw in the check itself. The first audit implementation flagged
+`repeat(auto-fill, minmax(248px, 1fr))` in `.card-grid`, which is **valid**: the `fr` sits
+inside the repeat, which is the normal responsive idiom. Only a flexible track *outside* an
+auto-repeat is invalid. The audit now strips balanced `repeat(...)` calls and inspects what
+remains. A check that cries wolf is worse than no check, because people learn to ignore it.
+
+Measured: 1 row at 1280px, 1 row at 820px, 3 rows at 390px with a largest gap of 24px, and
+no horizontal scroll at any width, on all three pages.
