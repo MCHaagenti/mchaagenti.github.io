@@ -59,6 +59,18 @@ This site documents the MCHaagenti projects. When a change to `report` or `trade
 behaviour this site describes, update the corresponding page here in the same piece of
 work — the shared change propagation rule applies across repositories, not only within one.
 
+## Modularity
+
+Separate content and code into multiple focused files rather than letting one grow into
+everything. Keep files concise and to a single responsibility. One page per section under
+`docs/`, one stylesheet per section when a section genuinely needs its own.
+
+## Dashes
+
+Do not use dashes unnecessarily. They belong in file and directory names
+(`getting-started.md`) and in branch names. Avoid them in variable names, database
+schemas, and general prose unless a standard convention requires them.
+
 ## Verifying
 
 There is no test suite and no build. Before completing a task, confirm the pages render and
