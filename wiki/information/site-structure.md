@@ -7,12 +7,19 @@ docs/
 ├── index.html                   # the portal homepage
 ├── mcreport/index.html          # one folder per project page
 ├── mctrade/index.html
-├── styles/
-│   ├── main/style.css           # vendored theme: tokens, components, page transitions
-│   └── important/main.css       # vendored centered container card layout
-└── scripts/
-    └── main/script.js           # vendored page transition controller
+├── css/
+│   ├── main.css                 # tokens and base element styles
+│   └── shared/
+│       ├── layout.css           # header, nav, footer, breadcrumbs
+│       └── components.css       # cards, callouts, accordions, tables, badges
+├── js/site.js                   # injects the shared header and footer
+└── partials/
+    ├── header.html
+    └── footer.html
 ```
+
+A page links its stylesheets in this order and no other: `main.css`, `shared/layout.css`,
+`shared/components.css`, then its own `{section}/{section}.css` if it has one.
 
 Adding a project page means adding a folder with its own `index.html`, linking it from the
 homepage's navigation blocks, and adding it to the Explore blocks on the sibling project
@@ -21,14 +28,17 @@ pages so the pages cross reference each other.
 Pages follow one structure: a `container` div, an `h1`, then `section` divs each with an
 `id` and an `h2`, ending with the Explore blocks and the footer.
 
-**The vendored theme styles no tables.** Use the `ul` and `strong code` idiom the existing
-pages use for field and command listings. Adding table CSS locally would be changing the
-design system, which has to happen in the canonical `DESIGN.md` first.
+Tables are supported now, but **always wrap one in `.table-wrap`** — that is what makes a
+wide table scroll inside its own box instead of scrolling the whole page sideways.
 
-## The vendored theme
+Compose from the components in `DESIGN.md` section 4 before writing any CSS. The binding
+form of the rules is [`../../.agents/design/silver-glass.md`](../../.agents/design/silver-glass.md).
 
-The visual language is the shared MCEngine "Silver Glass" design system — white, silver,
-modern, with page transitions and no dark theme.
+## The theme
+
+The visual language is the Silver Glass design system — white, silver, and translucent,
+with no dark theme. It is defined in this repository's own CSS under `docs/css/`; nothing
+is fetched over the network.
 
 Each site in the ecosystem **vendors its own copy** of the theme, so it has no runtime
 dependency on another repository. The theme files above live in this repository, and every

@@ -17,9 +17,11 @@ would want are in [`../../../wiki/`](../../../wiki/), linked rather than repeate
 | `docs/index.html` | The portal homepage, with navigation blocks to every project. |
 | `docs/mcreport/index.html` | The MCReport documentation page. |
 | `docs/mctrade/index.html` | The MCTrade documentation page. |
-| `docs/styles/main/style.css` | Vendored shared theme: tokens, components, page transitions. |
-| `docs/styles/important/main.css` | Vendored centered container card layout. |
-| `docs/scripts/main/script.js` | Vendored page transition controller. |
+| `docs/css/main.css` | Design tokens and base element styles. Every value the site uses resolves here. |
+| `docs/css/shared/layout.css` | Header, nav, footer, breadcrumbs. |
+| `docs/css/shared/components.css` | Every component class. |
+| `docs/js/site.js` | Injects the header and footer partials at runtime. |
+| `docs/partials/` | The shared header and footer, using the `{{ROOT}}` token. |
 | `DESIGN.md` | The design system this site must stay within. |
 | `.agents/` | This instruction set. Start at [`../../index/root-index.md`](../../index/root-index.md). |
 | `wiki/` | Human documentation. |
@@ -38,9 +40,12 @@ claim tests passed; say plainly that none exist.
 * **The theme is vendored, not linked.** Every page references `docs/styles/` and
   `docs/scripts/` with relative paths. A network import or a raw content URL breaks the
   repository's independence from `MCEngine/mcengine.github.io`.
-* **The theme styles no tables.** A `<table>` renders unstyled against the Silver Glass
-  system. Use the `ul` with `strong code` idiom the existing pages use, rather than adding
-  table CSS, which would be a local change to the design system.
+* **A page must serve over HTTP to render fully.** `site.js` fetches the partials, so
+  opening a file directly leaves the header and footer empty. That is not a bug.
+* **Never give a partial YAML front matter.** Jekyll only runs Liquid over files that have
+  it, and Liquid would eat the `{{ROOT}}` token. Never add `.nojekyll` either; it is
+  forbidden by the repository rules.
+* **Wrap every table in `.table-wrap`**, or a wide one scrolls the whole page sideways.
 * **`DESIGN.md` is a synchronized copy**, not this repository's invention. Changing the
   visual language here without changing the canonical copy puts the two out of step.
 * Pages are explanatory. Source code listings belong in the project repositories.
