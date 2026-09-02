@@ -114,3 +114,46 @@ carry front matter. It is wired into the trigger table, the agents index, and
 
 The old `docs/styles/` is untouched and still live; task 4 removes it once the pages no
 longer reference it.
+
+### Task 3 — feat/design-components
+
+Added layers 2 and 3 and the runtime chrome: `docs/css/shared/layout.css`,
+`docs/css/shared/components.css`, `docs/js/site.js`, and the two partials.
+
+`components.css` implements every class in section 4 — hero, panel, card grid, feature
+list, native `<details>` accordion, code, table wrap, badge, chip, button, callout,
+definition list, eyebrow, lead — and `layout.css` covers the sticky header, nav,
+dropdown, mobile toggle, breadcrumbs, and footer.
+
+**The opaque-overlay rule is applied where it actually matters.** Both the dropdown panel
+and the mobile nav list use `--surface-solid` with `backdrop-filter: none`, each with a
+comment saying why: they sit inside the blurred header, so a translucent fill can be
+dropped where `backdrop-filter` is unsupported and the page content behind them bleeds
+through. This is the one rule in the document that looks like a style preference and is
+not.
+
+Five more tokens were added rather than writing literals: `--ok-soft`, `--warn-soft`,
+`--sponsor-deep` for the sponsor gradient's end stop, and `--code-bg` / `--code-ink` for
+the dark `pre` section 4 specifies. Two automated checks now hold across every stylesheet:
+**no hex outside `:root`**, and **no `var()` referencing an undefined token** (44 defined,
+40 used).
+
+**Verified in a real browser, not by reading the code.** The site was served over HTTP and
+driven with Chromium:
+
+* the header and footer are injected
+* **no `{{ROOT}}` token survives in the DOM** — the Jekyll risk recorded in task 1 does
+  not materialise, because a partial without front matter is copied verbatim and Liquid
+  never sees it
+* the active nav link is marked, the footer year is stamped, the inline SVG favicon is
+  injected, tokens resolve (`--ink-900` → `#1b2430`), the header paints
+  `rgba(255,255,255,0.9)`
+* **zero console errors**
+
+One fix came out of that run. With `SITE_ROOT` set to `""` at the site root, substitution
+produced `href=""`, which resolves to the current page rather than reading as a path. The
+loader now normalizes `""` to `"./"` internally, so the documented contract in `DESIGN.md`
+is unchanged while the emitted links are `./`, `./mcreport/`, `./mctrade/`.
+
+The old `docs/styles/` and `docs/scripts/` are still present and still referenced by the
+three pages; task 4 rebuilds the pages and removes them.

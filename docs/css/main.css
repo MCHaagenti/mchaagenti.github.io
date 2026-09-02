@@ -35,7 +35,15 @@
     --sponsor: #d6336c;
     --sponsor-soft: rgba(214, 51, 108, .10);
     --ok: #1f7a54;
+    --ok-soft: rgba(31, 122, 84, .12);
     --warn: #9a6b16;
+    --warn-soft: rgba(154, 107, 22, .12);
+    /* Gradient end for the sponsor button; --sponsor is the flat colour. */
+    --sponsor-deep: #b02a5b;
+
+    /* Code surfaces. DESIGN.md section 4 specifies a dark pre. */
+    --code-bg: #1c2431;
+    --code-ink: #e7edf6;
 
     /* --- Transparent glass surfaces --- */
     --glass: rgba(255, 255, 255, .62);

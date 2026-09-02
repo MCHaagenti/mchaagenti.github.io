@@ -1,0 +1,300 @@
+/*
+ * Silver Glass — layer 2: page chrome.
+ *
+ * Sticky glass header, navigation, footer, breadcrumbs. Everything here resolves
+ * to a token from main.css.
+ */
+
+/* --- Sticky glass header --- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+    border-bottom: 1px solid var(--hairline);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    min-height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font-weight: 700;
+    color: var(--ink-900);
+    text-decoration: none;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+}
+
+.nav__brand:hover {
+    color: var(--accent-strong);
+}
+
+.nav__mark {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: linear-gradient(150deg, var(--silver-400), var(--silver-600));
+    color: var(--white);
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.nav__links {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+/* Pushes whatever follows it to the far right. */
+.nav__spacer {
+    flex: 1;
+}
+
+.nav__link {
+    display: inline-block;
+    padding: .45rem .7rem;
+    border-radius: var(--radius-sm);
+    color: var(--ink-700);
+    text-decoration: none;
+    font-size: .94rem;
+    font-weight: 550;
+    white-space: nowrap;
+}
+
+.nav__link:hover {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+.nav__link.is-active {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+/* --- Dropdown --- */
+.nav__dd {
+    position: relative;
+}
+
+.nav__dd-panel {
+    position: absolute;
+    top: calc(100% + .4rem);
+    left: 0;
+    min-width: 210px;
+    padding: .35rem;
+    list-style: none;
+    margin: 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--hairline);
+
+    /*
+     * Opaque, and blur explicitly off. This panel covers page content and sits
+     * inside the blurred header; a translucent fill can be dropped where
+     * backdrop-filter is unsupported, letting content bleed through.
+     */
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: var(--shadow-md);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity .15s ease, transform .15s ease, visibility .15s;
+}
+
+.nav__dd:hover .nav__dd-panel,
+.nav__dd:focus-within .nav__dd-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav__dd-panel .nav__link {
+    display: block;
+}
+
+/* --- Mobile toggle --- */
+.nav__toggle {
+    display: none;
+    margin-left: auto;
+    padding: .45rem .7rem;
+    font: inherit;
+    font-size: .9rem;
+    color: var(--ink-700);
+    background: var(--glass-faint);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.nav__toggle:hover {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+@media (max-width: 900px) {
+    .nav {
+        flex-wrap: wrap;
+        padding-top: .6rem;
+        padding-bottom: .6rem;
+    }
+
+    .nav__toggle {
+        display: inline-block;
+    }
+
+    .nav__links {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: .15rem;
+        margin-top: .6rem;
+        padding: .5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--hairline);
+
+        /* Same rule as the dropdown: this panel covers content, so it is opaque. */
+        background: var(--surface-solid);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        box-shadow: var(--shadow-md);
+    }
+
+    .nav__links.is-open {
+        display: flex;
+    }
+
+    .nav__spacer {
+        display: none;
+    }
+
+    .nav__dd-panel {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: 0;
+        padding: 0 0 0 .6rem;
+        background: transparent;
+    }
+}
+
+/* --- Breadcrumbs --- */
+.breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    font-size: .88rem;
+    color: var(--ink-400);
+    margin: 0 0 1.25rem;
+}
+
+.breadcrumbs a {
+    color: var(--ink-500);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
+.breadcrumbs .sep {
+    color: var(--silver-400);
+}
+
+/* --- Footer --- */
+.site-footer {
+    margin-top: 3rem;
+    border-top: 1px solid var(--hairline);
+    background: var(--glass);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+}
+
+.site-footer__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 2rem 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1.4fr repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.site-footer__brand {
+    font-weight: 700;
+    color: var(--ink-900);
+    margin-bottom: .35rem;
+}
+
+.site-footer__tag {
+    color: var(--ink-500);
+    font-size: .92rem;
+    margin: 0;
+}
+
+.site-footer__col h3 {
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-400);
+    margin: 0 0 .5rem;
+}
+
+.site-footer__col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-footer__col li {
+    margin: .25rem 0;
+}
+
+.site-footer__col a {
+    color: var(--ink-700);
+    text-decoration: none;
+    font-size: .93rem;
+}
+
+.site-footer__col a:hover {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
+.site-footer__base {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 1.25rem 1.75rem;
+    color: var(--ink-400);
+    font-size: .86rem;
+}
+
+@media (max-width: 700px) {
+    .site-footer__inner {
+        grid-template-columns: 1fr;
+    }
+}
