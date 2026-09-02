@@ -132,3 +132,37 @@ explaining why it is only an import.
 Nothing was deleted here. Unlike `report` and `trade`, this repository never had a root
 `CLAUDE.md` or a `.windsurfrules`, so this task only adds the import that brings it into
 line with its siblings.
+
+### Task 4 — chore/agents-duplicate-cleanup
+
+Applied the four audit verdicts recorded above, each approved per file, and removed their
+rows from `agents-index.md` in the same commit. The now empty `.agents/git/` went with
+them, so the repository passes the consumer check that a Mode B tree carries no `git/`,
+`planning/`, `prompts/`, or `creators/` folder.
+
+`git/workflow.md` collapsed three shared files into one and was strictly weaker than any
+of them.
+
+`architecture/index-template.md` and `architecture/agent-directories.md` were not stale
+copies but active contradictions. The first mandated the `INDEX.md` files the directory
+mandate forbids outright; the second prescribed an `.agents/` layout of `skills/`,
+`tools/`, `knowledge/`, `personas/`, and `ethics/` with a `README.md` in every folder,
+which is not the shared layout. An agent reading local first would have followed both and
+been wrong.
+
+`rules/execution.md` was the most consequential. It required that "for any pull request
+update, the version must always be updated", where `{shared}/rules/versioning.md` forbids
+bumping a version on your own initiative at all. It also restated the documentation layout
+in terms of a fixed `wiki/requirements.md`, `api.md`, `environment.md`, and `system.md`
+set, which the directory mandate does not use.
+
+Its genuinely local content was not discarded. The modularity rule, the dashes rule, the
+environment documentation rules, and the website synchronization rule moved into
+`repository.md` before the file was deleted; the environment and synchronization rules had
+already landed there in task 2.
+
+Nothing was promoted upstream and no override was declared. The override table stays
+empty, which is now an accurate statement rather than a default.
+
+`rules/iron.md` was kept. It matches nothing in the shared set, and it is reported as a
+candidate for promotion rather than deleted.
