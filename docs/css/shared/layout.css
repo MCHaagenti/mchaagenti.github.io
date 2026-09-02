@@ -239,9 +239,25 @@
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 2rem 1.25rem 1.5rem;
-    display: grid;
-    grid-template-columns: 1.4fr repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
+    /*
+     * Flex rather than grid, deliberately. The footer partial is shared, so the
+     * number of link columns is not fixed; a grid track list would have to name
+     * a count and would break silently when a column is added.
+     *
+     * This replaced `1.4fr repeat(auto-fit, minmax(150px, 1fr))`, which is an
+     * invalid track list — an auto-repeat cannot be combined with `fr` sizing —
+     * so the whole declaration was dropped and every child stacked.
+     */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.5rem 3rem;
+}
+
+/* The brand block takes the slack so the link columns sit to the right. */
+.site-footer__intro {
+    flex: 1 1 280px;
+    min-width: 0;
 }
 
 .site-footer__brand {
@@ -254,6 +270,11 @@
     color: var(--ink-500);
     font-size: .92rem;
     margin: 0;
+}
+
+.site-footer__col {
+    flex: 0 1 auto;
+    min-width: 140px;
 }
 
 .site-footer__col h3 {
@@ -295,6 +316,16 @@
 
 @media (max-width: 700px) {
     .site-footer__inner {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /*
+     * Load-bearing, not tidy-up. flex-basis sizes the main axis, which is
+     * vertical once the direction is column, so the 280px basis above becomes a
+     * 280px tall box and opens a large dead gap under the tagline.
+     */
+    .site-footer__intro {
+        flex: 0 0 auto;
     }
 }

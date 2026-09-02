@@ -34,6 +34,21 @@ wide table scroll inside its own box instead of scrolling the whole page sideway
 Compose from the components in `DESIGN.md` section 4 before writing any CSS. The binding
 form of the rules is [`../../.agents/design/silver-glass.md`](../../.agents/design/silver-glass.md).
 
+## Checking a layout change
+
+```bash
+python3 -m http.server 8877 --directory docs &
+node tools/check-layout.mjs
+```
+
+It asserts the footer resolves to one row at 1280px and stacks cleanly at 390px, checks for
+horizontal page scroll, and audits the stylesheets for a track list that combines an
+auto-repeat with a flexible track — which is invalid, is dropped silently, and is what
+stacked the footer.
+
+It needs `playwright` available; set `CHROME_PATH` if the browser is not at the default
+location.
+
 ## The theme
 
 The visual language is the Silver Glass design system — white, silver, and translucent,

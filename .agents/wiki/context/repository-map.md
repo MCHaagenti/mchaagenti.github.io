@@ -22,6 +22,7 @@ would want are in [`../../../wiki/`](../../../wiki/), linked rather than repeate
 | `docs/css/shared/components.css` | Every component class. |
 | `docs/js/site.js` | Injects the header and footer partials at runtime. |
 | `docs/partials/` | The shared header and footer, using the `{{ROOT}}` token. |
+| `tools/check-layout.mjs` | Layout regression check. Asserts computed geometry and audits for silently invalid track lists. |
 | `DESIGN.md` | The design system this site must stay within. |
 | `.agents/` | This instruction set. Start at [`../../index/root-index.md`](../../index/root-index.md). |
 | `wiki/` | Human documentation. |
@@ -46,6 +47,9 @@ claim tests passed; say plainly that none exist.
   it, and Liquid would eat the `{{ROOT}}` token. Never add `.nojekyll` either; it is
   forbidden by the repository rules.
 * **Wrap every table in `.table-wrap`**, or a wide one scrolls the whole page sideways.
+* **An invalid CSS declaration is dropped silently.** Nothing throws and nothing logs, so
+  landmark and injection checks pass while the layout is wrong. After changing any layout
+  rule run `node tools/check-layout.mjs`, which asserts geometry rather than structure.
 * **`DESIGN.md` is a synchronized copy**, not this repository's invention. Changing the
   visual language here without changing the canonical copy puts the two out of step.
 * Pages are explanatory. Source code listings belong in the project repositories.
