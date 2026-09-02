@@ -36,6 +36,12 @@ document the universal jar each plugin now ships as, and cross link each other.
 * No declared shared overrides.
 * No page for any project other than MCReport and MCTrade.
 
+## Verification available
+
+`node tools/check-layout.mjs`, against the site served over HTTP, asserts computed layout
+geometry and audits for silently invalid grid track lists. Run it after any layout change;
+the structural checks alone let a broken footer ship in 0.2.0.
+
 ## Next obvious step
 
 Two candidates, in order.

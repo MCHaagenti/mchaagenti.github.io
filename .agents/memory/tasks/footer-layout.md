@@ -99,3 +99,19 @@ remains. A check that cries wolf is worse than no check, because people learn to
 
 Measured: 1 row at 1280px, 1 row at 820px, 3 rows at 390px with a largest gap of 24px, and
 no horizontal scroll at any width, on all three pages.
+
+### Task 3 — chore/footer-layout-release
+
+Closed out at `0.2.1` — a patch: a layout bug fixed and a check added, with no content
+added or removed and no page other than the shared footer affected.
+
+`wiki/logs/0/2/0/` and the earlier directories are not deleted; a released version
+directory never is.
+
+The changelog states plainly why this shipped unnoticed in 0.2.0, rather than presenting
+the fix without the cause: an invalid declaration is discarded silently, so every
+structural check passed while the layout was wrong.
+
+## Status
+
+Work complete. Three branches stacked in order.
