@@ -1,6 +1,13 @@
+---
+name: website-structure
+description: The MCEngine site layout this portal follows, and how the shared theme is vendored locally rather than fetched over the network.
+---
+
 # Website structure — mchaagenti.github.io
 
-This repository's own site structure and how-to guides.
+This repository's own site structure and how-to guides. It describes the published site
+under `docs/`; the instruction set that governs editing it is routed from
+[`../index/root-index.md`](../index/root-index.md).
 
 ## Website repository structure
 
@@ -10,9 +17,10 @@ example `home`, `api`, `logs`).
 
 ```
 {org}.github.io/
-├── AGENTS.md                         # agent rules for this repository (this file)
-├── INDEX.md                          # repository structure index
+├── AGENTS.md                         # entry point; routes into .agents/
+├── .agents/                          # the instruction set, routed from .agents/index/
 ├── README.md                         # human-facing project overview
+├── wiki/                             # human documentation
 └── docs/                             # served by GitHub Pages (Settings → Pages → branch master, folder /docs)
     ├── index.html                    # homepage
     ├── {section}/index.html          # one folder per page/section

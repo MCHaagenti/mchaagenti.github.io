@@ -1,13 +1,65 @@
-# Repository-specific rules — mchaagenti.github.io
+---
+name: repository-rules
+description: How the MCHaagenti portal is built and bounded — mode, the static site constraint, the vendored theme, and what must not be introduced.
+---
 
-This repository is the MCHaagenti documentation portal, served by GitHub Pages from `docs/`. These instructions apply to every AI agent (Claude Code, Windsurf, Codex, and others) working in this repository.
+# Repository Rules — MCHaagenti Portal
 
-## Repository-specific rules
-* **Read First (Structure):** Always read `INDEX.md` to understand the repository structure. If `INDEX.md` does not exist, create it first. Actively update it when structural changes occur.
-* **Read Second (Context):** Always read `README.md` to understand the core project goals and context.
-* **Design:** The site uses the shared MCEngine ecosystem theme (white/silver/modern, no dark theme), vendored locally in this repository under `docs/styles/` and `docs/scripts/` (never imported over the network, never raw content URLs). The design system is documented in this repository's own `DESIGN.md`, a copy kept in sync with the canonical `DESIGN.md` in `MCEngine/mcengine.github.io`; never change the visual style outside of what `DESIGN.md` allows.
-* **Content:** The website explains how the MCHaagenti projects work. Pages must stay explanatory; do not embed source code listings inside the website pages.
-* **Static Only:** GitHub Pages serves static files from `docs/`. Use plain HTML, CSS, and JavaScript with no build step and no external runtime dependencies beyond the shared MCEngine theme assets.
-* **No `.nojekyll`:** Never create `.nojekyll` files anywhere in this repository. GitHub Pages serves the site's static files without them.
-* **Execution:** Create a solid plan. Write content section-by-section. Verify pages render correctly and links resolve before completing the task.
-* **No Master/Main:** Never work directly on `master` or `main`. Create a new branch if the task scope changes; otherwise, continue on the active branch.
+`mchaagenti.github.io` is the MCHaagenti documentation portal. It explains how the
+MCHaagenti projects work, and it is served by GitHub Pages from `docs/`.
+
+## Mode and instruction set
+
+This repository is a **consumer** of the shared LXAgents instruction set, resolved through
+the **`lxagents-agents-base`** MCP connector. It carries only what is its own: its indexes,
+this file, the hosting iron rules, the website structure, its agent wiki, and its memory.
+Nothing served over `agents://` is copied here. There are currently no overrides; the
+override table in [`../index/root-index.md`](../index/root-index.md) is the record if that
+changes.
+
+## The site is static, and `docs/` is the published artifact
+
+* GitHub Pages serves `docs/` directly. Use plain HTML, CSS, and JavaScript with **no
+  build step** and no external runtime dependency beyond the vendored theme assets.
+* `docs/` is site source, not a documentation tree. The two documentation trees are
+  `wiki/` for people and `.agents/wiki/` for agents; `docs/` is neither and is not indexed
+  as one.
+* **Never create a `.nojekyll` file**, anywhere in this repository. Pages serves the site's
+  static files without one.
+
+## Design
+
+The site uses the shared MCEngine ecosystem theme — white, silver, modern, no dark theme —
+vendored locally under `docs/styles/` and `docs/scripts/`. Never import a stylesheet or
+script over the network, and never from a raw content URL.
+
+The design system is documented in this repository's own `DESIGN.md`, a copy kept in sync
+with the canonical `DESIGN.md` in `MCEngine/mcengine.github.io`. **Never change the visual
+style beyond what `DESIGN.md` allows.** The layout the site follows is in
+[`../architecture/website.md`](../architecture/website.md).
+
+## Content
+
+Pages must stay explanatory. Do not embed source code listings inside the website pages;
+link to the project repository instead.
+
+## Environment documentation
+
+* Do not create a `.env.example` file. Document required environment variables in
+  [`../../wiki/environments/setup.md`](../../wiki/environments/setup.md) inside a code
+  block instead.
+* Use standardized placeholders in examples, never realistic values: `your_{name}_api_key`,
+  `your_server_api_key`, and similar.
+* Infrastructure configuration examples — Kubernetes, Docker Compose, and the like — go in
+  the same environments page, never scattered across other documents.
+
+## Keeping the sibling projects in sync
+
+This site documents the MCHaagenti projects. When a change to `report` or `trade` alters
+behaviour this site describes, update the corresponding page here in the same piece of
+work — the shared change propagation rule applies across repositories, not only within one.
+
+## Verifying
+
+There is no test suite and no build. Before completing a task, confirm the pages render and
+that every link resolves.
