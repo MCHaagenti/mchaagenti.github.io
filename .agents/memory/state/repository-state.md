@@ -8,8 +8,8 @@ description: Current state of the MCHaagenti portal after adopting the shared in
 ## What this repository is
 
 The MCHaagenti documentation portal, served by GitHub Pages from `docs/`. Static HTML,
-CSS, and JavaScript, no build step, no package manifest. It vendors its own copy of the
-shared MCEngine theme. Version `0.1.0`, recorded in `logs-index.md` because there is no
+CSS, and JavaScript, no build step, no package manifest. It implements the Silver Glass design system
+in its own CSS under `docs/css/`, and fetches nothing over the network. Version `0.1.0`, recorded in `logs-index.md` because there is no
 manifest to carry it.
 
 ## Instruction set
@@ -38,6 +38,13 @@ document the universal jar each plugin now ships as, and cross link each other.
 
 ## Next obvious step
 
-Both plugins are documented and both are at 1.0.0. The gap worth closing next is that the
-site has no way to state which plugin version a page describes, so a reader cannot tell
-whether the page matches the jar they downloaded.
+Two candidates, in order.
+
+The design system now supports components the pages do not yet use — the accordion, the
+definition list, badges, and chips. The command and column listings on the MCReport page
+were written as `ul` because the previous theme styled no tables; they would read better as
+tables in `.table-wrap`, or as `.deflist` rows.
+
+Then: no page states which plugin version it describes, so a reader cannot tell whether the
+page matches the jar they downloaded. Both plugins are at 1.0.0, which makes that worth
+fixing.
