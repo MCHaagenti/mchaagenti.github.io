@@ -166,3 +166,35 @@ empty, which is now an accurate statement rather than a default.
 
 `rules/iron.md` was kept. It matches nothing in the shared set, and it is reported as a
 candidate for promotion rather than deleted.
+
+### Task 5 — chore/agents-adoption-release
+
+Closed out the adoption.
+
+Added `wiki/logs/0/1/0/CHANGELOG.md` and registered it in `logs-index.md` in the same
+commit. `0.1.0` is a version claim rather than a record of an existing one — this
+repository carried no version anywhere before — and the user chose it explicitly, which is
+the approval the versioning rule requires. Because there is no package manifest,
+`logs-index.md` is the only place the version is stated.
+
+Verification run against the setup checklist: no `INDEX.md` anywhere, no `git/`,
+`planning/`, `prompts/`, or `creators/` folder, no session link in any tracked file or in
+any commit message on these five branches, frontmatter present and unique on all 13 local
+instruction files, no frontmatter on any `wiki/` page, every relative link resolving, and
+every file in an indexed scope appearing in exactly one index.
+
+## Status
+
+Work complete. Five branches stacked in order, none merged. Pull requests open in order
+and merging was explicitly withheld by the user.
+
+## Reported, not applied
+
+Two findings were raised for the user rather than acted on:
+
+* `DESIGN.md` sits at the repository root and is human facing documentation. By the
+  audience test it belongs at `wiki/information/`, but it predates this work and moving it
+  was outside the approved scope.
+* `rules/iron.md` reads as an organization wide MCHaagenti convention with no shared
+  equivalent, and is a candidate to promote into the shared set. A consuming repository
+  never writes to the shared set, so it stays local until that is raised upstream.
